@@ -22,6 +22,4 @@ public class AdminController {
         model.addAttribute("addcause", addcause);
         return addcause.toString();
     }
-
-    
 }
