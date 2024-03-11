@@ -8,25 +8,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Admin {
+public class User {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private int aid;
+    private int uid;
     private String username;
     private String password;
+    private String email;
+    private String firstname;
+    private String lastname;
+    
+
 
     
 }
-
-/*private String cause_name;
- 
-    private double goalAmount;
-
-    private String description;
-
-    private MultipartFile imagFile; */
