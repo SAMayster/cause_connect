@@ -1,8 +1,6 @@
 package com.cause_connect.cause_c.model;
-
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.Date;
 
 @Entity
@@ -25,7 +23,6 @@ public class Donation {
 
     private double payableAmount;
 
-   
     private double amountRaisedTillNow;
     
     @Temporal(TemporalType.TIMESTAMP)

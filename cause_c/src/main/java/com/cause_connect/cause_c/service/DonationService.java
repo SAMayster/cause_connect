@@ -1,4 +1,3 @@
-
 package com.cause_connect.cause_c.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +14,21 @@ import com.cause_connect.cause_c.repo.DonationRepo;
 public class DonationService {
     @Autowired
     private CauseRepo crepo;
+
+    @Autowired
     private DonationRepo drepo;
+
     public ResponseEntity<?> addDonation(String causeName, Donation donation) {
-       
         Cause cause = crepo.findByName(causeName);
         if (cause != null) {
             if (donation.getPayableAmount() <= cause.getGoalAmount()) {
                 cause.setAmountRaised(cause.getAmountRaised() + donation.getPayableAmount());
-                System.out.println("HERE IS YOUR AMOUNT"+ cause.getAmountRaised());
                 donation.setCause(cause);
                 crepo.save(cause);
+                donation.setAmountRaisedTillNow(cause.getAmountRaised());
+                drepo.save(donation); // Saving the donation to the repo
+                
+                
 
                 return new ResponseEntity<>(donation, HttpStatus.CREATED);
             } else {
@@ -34,5 +38,9 @@ public class DonationService {
             return new ResponseEntity<>("Cause not found", HttpStatus.NOT_FOUND);
         }
     }
-    
 }
+
+    /* here .set for donation.setCause(cause); is done beacuse you just have ciause name as pathvariable not 
+     * cause obj so you have to set cause obj to donayion.
+      */
+
