@@ -19,10 +19,10 @@ public class DonationController {
     private DonationService donationservice;
 
     
-    @PostMapping("/{causeName}/donation")
-public ResponseEntity<?> addDonation(@PathVariable String causeName, @RequestBody Donation donation) {
-    return donationservice.addDonation(causeName, donation);
-}
+    @PostMapping("/cause/{causeName}/donation/{userId}")
+    public ResponseEntity<?> addDonation(@PathVariable String causeName, @RequestBody Donation donation, @PathVariable Integer userId) {
+        return donationservice.addDonation(causeName, donation, userId);
+    }
 }
 
 

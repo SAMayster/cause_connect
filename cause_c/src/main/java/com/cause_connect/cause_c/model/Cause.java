@@ -1,6 +1,5 @@
 package com.cause_connect.cause_c.model;
 import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,9 +26,12 @@ import lombok.NoArgsConstructor;
 
         @Column(columnDefinition="TEXT")
         private String description;
+        
         private double goalAmount;
+        
         private double amountRaised;
         @Temporal(TemporalType.DATE)
+        
         private Date creationDate = new Date();
 
 
