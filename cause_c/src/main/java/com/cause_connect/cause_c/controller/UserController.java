@@ -35,7 +35,7 @@ public ResponseEntity<?> getPaymentHistory(@PathVariable Integer userId) {
                 history.setFullName(user.getFirstname() + " " + user.getLastname());
                 history.setCauseName(donation.getCause().getName());
                 history.setPayableAmount(donation.getPayableAmount());
-                history.setGoalAmount(donation.getCause().getGoalAmount());
+              //  history.setGoalAmount(donation.getCause().getGoalAmount());
                 history.setDonationTime(donation.getDonationTime());
                 return history;
             }).collect(Collectors.toList());

@@ -13,7 +13,6 @@ public class DonationHistory {
     private String fullName;
     private String causeName;
     private double payableAmount;
-    private double goalAmount;
     private Date donationTime;
     
 }

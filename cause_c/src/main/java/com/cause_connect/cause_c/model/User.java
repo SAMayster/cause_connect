@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -30,7 +31,8 @@ public class User {
     private String lastname;
 
     @OneToMany(mappedBy = "user")
-   
-    private List<Donation> donations;
-     
+    @JsonIgnoreProperties("user") // Ignore 'user' property in Donation entity
+    private List<Donation> donations;   
 }
+
+/*learn about @jsonbackref and @jsonmanageref */

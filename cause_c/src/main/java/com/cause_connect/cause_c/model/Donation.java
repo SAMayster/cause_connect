@@ -2,7 +2,7 @@ package com.cause_connect.cause_c.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
@@ -17,8 +17,7 @@ public class Donation {
 
     @ManyToOne
     @JoinColumn(name = "uid", referencedColumnName = "uid")
-    @JsonBackReference
-    
+    @JsonIgnoreProperties("donations") // Ignore 'donations' property in User entity
     private User user;
 
     @ManyToOne
@@ -33,5 +32,6 @@ public class Donation {
     @Temporal(TemporalType.TIMESTAMP)
     private Date donationTime = new Date();
 }
+
 
 /*@jsonignore annotation is used for not including any variable in json file, use it above any variable */

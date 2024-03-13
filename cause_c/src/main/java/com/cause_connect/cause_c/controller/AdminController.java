@@ -1,16 +1,22 @@
 package com.cause_connect.cause_c.controller;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.cause_connect.cause_c.model.Cause;
+import com.cause_connect.cause_c.model.Donation;
 import com.cause_connect.cause_c.repo.CauseRepo;
+import com.cause_connect.cause_c.repo.DonationRepo;
+
 
 
 @RestController
@@ -20,7 +26,10 @@ public class AdminController {
     
     @Autowired
     private CauseRepo crepo;
-    
+
+    @Autowired
+    private DonationRepo drepo;
+
 
     
     @PostMapping("/addcause")
@@ -48,6 +57,23 @@ public ResponseEntity<String> deleteCause(@PathVariable String name) {
     }
 }
 
+@GetMapping("/alldonations")
+public ResponseEntity<List<Donation>> getAllDonations() {
+    try {
+        List<Donation> donations = drepo.findAllWithUsersAndCauses();
+        if (donations.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(donations, HttpStatus.OK);
+    } catch (Exception e) {
+        System.out.println("Exception: " + e.getMessage());
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+
+    
 
 /*
  @PostMapping("/addcause")
