@@ -1,36 +1,59 @@
 package com.cause_connect.cause_c.controller;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cause_connect.cause_c.model.Cause;
 import com.cause_connect.cause_c.repo.CauseRepo;
 
-@RestController
-@RequestMapping({ "/cause" })
+@Controller
+@RequestMapping({ "/home" })
 public class CauseController {
 
     @Autowired
     private CauseRepo crepo;
 
-    @GetMapping({""})
-public List<String> showCauseList() {
-    List<Cause> causes = crepo.findAll();
-    List<String> causeNames = new ArrayList<>();
-    for (Cause cause : causes) {
-        causeNames.add(cause.getName());
+    @GetMapping("")
+    public String home(Model model) {
+        List<Cause> causes = crepo.findAll(); // Fetch the causes from your service
+        model.addAttribute("causes", causes);
+        return "home";
     }
-    return causeNames;
+    
+    
+    @GetMapping("/cause")
+    public String showCauseList(Model model) {
+
+        List<Cause> causes = crepo.findAll();
+        model.addAttribute("causes", causes);
+        return "cause";  // This should be the name of your Thymeleaf template
+    }
+    
+
+    @GetMapping("/cause/details")
+    public String showCauseDetails(@RequestParam String name, Model model) {
+        Cause cause = crepo.findByName(name);
+        model.addAttribute("cause", cause);
+        System.out.println(name+"XXXXXXXXXXXXXXXXXXX"+name+"XXXXXXXXXXXXXXXXXXXXXXX");
+        return "causedetails";  // This should be the name of your Thymeleaf template
+    }
+
+
 }
 
-    @GetMapping({"/{name}"})
-    public Cause showCauseDetails(@PathVariable String name) {
-        return crepo.findByName(name);
-    }
 
-}
+
+
+/*
+ Learnings:
+15/03/23
+1) Done very basic mistake in mappings , i changed html file name and than started havings error
+2)used wrong names in causedetails.html like used cause.id instead of caused.cid , due to which not 
+able to show donation button
+ */

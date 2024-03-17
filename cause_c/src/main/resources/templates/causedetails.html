@@ -1,0 +1,58 @@
+
+<!--<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${cause.name}">Cause Name</title>
+</head>
+<body>
+    <h1 th:text="${cause.name}">Cause Name</h1>
+    <p th:text="${cause.description}">Cause Description</p>
+
+    <!-- Always display the donation form 
+    <form action="#" method="post" th:action="@{/cause/' + ${cause.name} + '/donation/' + ${session.user != null ? session.user.uid : ''}}">
+        <input type="hidden" name="causeId" th:value="${cause.cid}" />
+        <input type="number" name="amount" min="1" required />
+        <button type="submit">Donate</button>
+    </form>
+
+    <!-- Display login message if user is not logged in 
+    <div th:if="${session.user == null}">
+        <p>Please <a href="/login">log in</a> to make a donation.</p>
+    </div>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${cause.name}">Cause Name</title>
+</head>
+<body>
+    <h1 th:text="${cause.name}">Cause Name</h1>
+    <p th:text="${cause.description}">Cause Description</p>
+
+    <!-- Always display the donation form -->
+    <form id="donationForm" action="#" method="post" th:action="@{'/cause/' + ${cause.name} + '/donation/' + ${session.user != null ? session.user.uid : ''}}" th:data-user="${session.user}">
+        <input type="hidden" name="causeId" th:value="${cause.cid}" />
+        <input type="number" name="amount" min="1" required />
+        <button type="submit">Donate</button>
+    </form>
+
+    <script>
+        document.getElementById('donationForm').addEventListener('submit', function(event) {
+            var user = this.getAttribute('data-user');
+            if (user == null) {
+                // If the user is not logged in, show an alert message and prevent form submission
+                alert('Please log in to make a donation.');
+                event.preventDefault();
+                // Redirect the user to the login page
+                window.location.href = "/home";
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+

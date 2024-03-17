@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.cause_connect.cause_c.model.Admin;
 import com.cause_connect.cause_c.model.Cause;
 import com.cause_connect.cause_c.model.Donation;
 import com.cause_connect.cause_c.repo.CauseRepo;
 import com.cause_connect.cause_c.repo.DonationRepo;
+import com.cause_connect.cause_c.service.UserService;
 
 
 
@@ -29,6 +32,14 @@ public class AdminController {
 
     @Autowired
     private DonationRepo drepo;
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/login/admin")
+    public ResponseEntity<Admin> loginAdmin(@RequestBody Admin admin) {
+        return ResponseEntity.ok(userService.loginAdmin(admin.getEmail(), admin.getPassword()));
+    }
 
 
     

@@ -17,7 +17,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int aid;
-    private String username;
+    private String email;
     private String password;
 
     
