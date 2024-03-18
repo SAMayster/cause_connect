@@ -1,6 +1,7 @@
 package com.cause_connect.cause_c.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,7 +31,7 @@ public class User {
     private String firstname;
     private String lastname;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonIgnoreProperties("user") // Ignore 'user' property in Donation entity
     private List<Donation> donations;   
 }

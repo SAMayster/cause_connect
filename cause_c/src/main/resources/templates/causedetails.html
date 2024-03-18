@@ -32,8 +32,7 @@
     <h1 th:text="${cause.name}">Cause Name</h1>
     <p th:text="${cause.description}">Cause Description</p>
 
-    <!-- Always display the donation form -->
-    <form id="donationForm" action="#" method="post" th:action="@{'/cause/' + ${cause.name} + '/donation/' + ${session.user != null ? session.user.uid : ''}}" th:data-user="${session.user}">
+    <form id="donationForm" method="post" th:action="@{'/donate'}">
         <input type="hidden" name="causeId" th:value="${cause.cid}" />
         <input type="number" name="amount" min="1" required />
         <button type="submit">Donate</button>
@@ -41,18 +40,33 @@
 
     <script>
         document.getElementById('donationForm').addEventListener('submit', function(event) {
-            var user = this.getAttribute('data-user');
-            if (user == null) {
-                // If the user is not logged in, show an alert message and prevent form submission
-                alert('Please log in to make a donation.');
-                event.preventDefault();
-                // Redirect the user to the login page
-                window.location.href = "/home";
-            }
-        });
+  fetch('/donate', {  // Add an object here to specify request options
+    method: 'POST'   // Set the method to POST
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (!data.loggedIn) {
+      alert('Please log in to make a donation.');
+      event.preventDefault();
+      window.location.href = "/login";
+    }
+  });
+});
     </script>
 </body>
 </html>
 
 
+
+
+
+
+ <!-- Always display the donation form 
+    <form id="donationForm" method="post" th:action="@{'/cause/' + ${cause.name} + '/donate/' + ${session.user != null ? session.user.uid : ''}}">
+        <input type="hidden" name="causeId" th:value="${cause.cid}" />
+        <input type="number" name="amount" min="1" required />
+        <button type="submit">Donate</button>
+    </form>
+-->
+<!-- Always display the donation form -->
 

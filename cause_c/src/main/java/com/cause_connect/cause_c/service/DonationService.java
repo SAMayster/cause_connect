@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+
 import com.cause_connect.cause_c.model.Cause;
 import com.cause_connect.cause_c.model.Donation;
 import com.cause_connect.cause_c.model.User;
@@ -32,7 +34,7 @@ public class DonationService {
             if (donation.getPayableAmount() <= cause.getGoalAmount()) {
                 cause.setAmountRaised(cause.getAmountRaised() + donation.getPayableAmount());
                 donation.setCause(cause);
-                donation.setUser(user); // Seting the user who made the donation
+                donation.setUser(user); // Setting the user who made the donation
                 crepo.save(cause);
                 donation.setAmountRaisedTillNow(cause.getAmountRaised());
                 drepo.save(donation); // Saving the donation to the repo
@@ -44,6 +46,9 @@ public class DonationService {
             return new ResponseEntity<>("Cause or User not found", HttpStatus.NOT_FOUND);
         }
     }
+    
+    
+    
 }
 
     /* here .set for donation.setCause(cause); is done beacuse you just have ciause name as pathvariable not 

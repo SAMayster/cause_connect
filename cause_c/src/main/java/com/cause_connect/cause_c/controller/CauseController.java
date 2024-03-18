@@ -40,7 +40,6 @@ public class CauseController {
     public String showCauseDetails(@RequestParam String name, Model model) {
         Cause cause = crepo.findByName(name);
         model.addAttribute("cause", cause);
-        System.out.println(name+"XXXXXXXXXXXXXXXXXXX"+name+"XXXXXXXXXXXXXXXXXXXXXXX");
         return "causedetails";  // This should be the name of your Thymeleaf template
     }
 
