@@ -1,27 +1,5 @@
 
-<!--<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title th:text="${cause.name}">Cause Name</title>
-</head>
-<body>
-    <h1 th:text="${cause.name}">Cause Name</h1>
-    <p th:text="${cause.description}">Cause Description</p>
-
-    <!-- Always display the donation form 
-    <form action="#" method="post" th:action="@{/cause/' + ${cause.name} + '/donation/' + ${session.user != null ? session.user.uid : ''}}">
-        <input type="hidden" name="causeId" th:value="${cause.cid}" />
-        <input type="number" name="amount" min="1" required />
-        <button type="submit">Donate</button>
-    </form>
-
-    <!-- Display login message if user is not logged in 
-    <div th:if="${session.user == null}">
-        <p>Please <a href="/login">log in</a> to make a donation.</p>
-    </div>
-</body>
-</html>
--->
+<!--
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -39,20 +17,54 @@
     </form>
 
     <script>
-        document.getElementById('donationForm').addEventListener('submit', function(event) {
-  fetch('/donate', {  // Add an object here to specify request options
-    method: 'POST'   // Set the method to POST
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (!data.loggedIn) {
-      alert('Please log in to make a donation.');
-      event.preventDefault();
-      window.location.href = "/login";
-    }
-  });
+ document.getElementById('donationForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from being submitted in the default manner
+
+    var formData = new FormData(this); // Create a FormData object from the form
+
+    fetch('/donate', {
+        method: 'POST',
+        body: formData // Send the form data in the body of the request
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.loggedIn) {
+            alert('Please log in to make a donation.');
+            window.location.href = "/login";
+        } else {
+            // If the donation was successful, redirect to the "Donation Status" page
+            window.location.href = "/donationStatus";
+        }
+    });
 });
+
     </script>
+</body>
+</html>
+
+-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${cause.name}">Cause Name</title>
+</head>
+<body>
+    <h1 th:text="${cause.name}">Cause Name</h1>
+    <p th:text="${cause.description}">Cause Description</p>
+
+    <!-- Updated form to use request parameters instead of path variables -->
+    <form action="#" th:action="@{/donate}" method="post">
+        <input type="hidden" name="causeName" th:value="${cause.name}" />
+        <input type="hidden" name="userId" th:value="${session.user != null ? session.user.uid : ''}" />
+        <input type="number" name="amount" min="1" required />
+        <button type="submit">Donate</button>
+    </form>
+
+    <!-- Display login message if user is not logged in -->
+    <div th:if="${session.user == null}">
+        <p>Please <a href="/login">log in</a> to make a donation.</p>
+    </div>
 </body>
 </html>
 
