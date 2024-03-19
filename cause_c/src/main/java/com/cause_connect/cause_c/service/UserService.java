@@ -20,21 +20,19 @@ public class UserService {
 
     private Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 
-    
     public User registerUser(User user) throws Exception {
-            // Check if the email is valid
-            if (!emailPattern.matcher(user.getEmail()).matches()) {
-                throw new Exception("Invalid email format");
-            }
-    
-            // Check if the email is already in use
-            if (userRepo.findByEmail(user.getEmail()) != null) {
-                throw new Exception("Email already in use");
-            }
-    
-            // Save the user to the database
-            return userRepo.save(user);
-        
+        // Check if the email is valid
+        if (!emailPattern.matcher(user.getEmail()).matches()) {
+            throw new Exception("Invalid email format");
+        }
+
+        // Check if the email is already in use
+        if (userRepo.findByEmail(user.getEmail()) != null) {
+            throw new Exception("Email already in use");
+        }
+
+        // Save the user to the database
+        return userRepo.save(user);
     }
 
     public User loginUser(String email, String password) {
@@ -47,4 +45,5 @@ public class UserService {
         return adminRepo.findByEmailAndPassword(email, password);
     }
 }
+
 

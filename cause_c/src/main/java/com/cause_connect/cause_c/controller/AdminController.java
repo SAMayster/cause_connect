@@ -36,7 +36,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/login/admin")
+    @PostMapping("/login")
     public ResponseEntity<Admin> loginAdmin(@RequestBody Admin admin) {
         return ResponseEntity.ok(userService.loginAdmin(admin.getEmail(), admin.getPassword()));
     }

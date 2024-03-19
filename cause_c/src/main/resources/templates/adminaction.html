@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Page</title>
+    <style>
+        /* Add your CSS here */
+    </style>
+</head>
+<body>
+    <h2>Add a Cause</h2>
+    <form id="addCauseForm">
+        <label for="name">Cause Name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <!-- Add more fields as needed -->
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Delete a Cause</h2>
+    <form id="deleteCauseForm">
+        <label for="causeName">Cause Name:</label><br>
+        <input type="text" id="causeName" name="causeName"><br>
+        <input type="submit" value="Delete">
+    </form>
+
+    <script>
+        document.getElementById('addCauseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var causeName = document.getElementById('name').value;
+            // Add more fields as needed
+            fetch('/addcause', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: causeName }), // Adjust this to match your Cause object
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Cause added successfully');
+                // You might want to do something with the response here
+            })
+            .catch((error) => {
+                alert('An error occurred');
+                // You might want to do something with the error here
+            });
+        });
+
+        document.getElementById('deleteCauseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var causeName = document.getElementById('causeName').value;
+            fetch('/deletecause/' + causeName, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Cause deleted successfully');
+                // You might want to do something with the response here
+            })
+            .catch((error) => {
+                alert('An error occurred');
+                // You might want to do something with the error here
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 package com.cause_connect.cause_c.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cause_connect.cause_c.model.Cause;
 import com.cause_connect.cause_c.model.Donation;
 import com.cause_connect.cause_c.model.DonationHistory;
 import com.cause_connect.cause_c.model.User;
+import com.cause_connect.cause_c.repo.CauseRepo;
 import com.cause_connect.cause_c.repo.UserRepo;
 import com.cause_connect.cause_c.service.UserService;
 
@@ -32,6 +37,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CauseRepo crepo;
+
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -40,14 +48,18 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, Model model) {
+    public String registerUser(@ModelAttribute User user, Model model, HttpSession session) {
         try {
             User registeredUser = userService.registerUser(user);
-            model.addAttribute("user", registeredUser);
-            return "registrationSuccess"; // return the name of the success page view
+            session.setAttribute("user", registeredUser);  // Store user in session
+            model.addAttribute("user", registeredUser);  // Add user to the model
+            return "redirect:/home/cause"; // return the name of the success page view
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
-            return "register";
+            List<Cause> causes = crepo.findAll();
+            model.addAttribute("causes", causes); 
+
+            return "home";
         }
     }
 
@@ -76,30 +88,27 @@ public String loginUser(@ModelAttribute User user, Model model, HttpSession sess
 }
 
 
-    @GetMapping("/{userId}/history")
-public ResponseEntity<?> getPaymentHistory(@PathVariable Integer userId) {
-    Optional<User> userOptional = urepo.findById(userId);
-    if (userOptional.isPresent()) {
-        User user = userOptional.get();
-        List<Donation> donations = user.getDonations();
-        if (!donations.isEmpty()) {
-            List<DonationHistory> donationHistory = donations.stream().map(donation -> {
-                DonationHistory history = new DonationHistory();
-                history.setFullName(user.getFirstname() + " " + user.getLastname());
-                history.setCauseName(donation.getCause().getName());
-                history.setPayableAmount(donation.getPayableAmount());
-              //  history.setGoalAmount(donation.getCause().getGoalAmount());
-                history.setDonationTime(donation.getDonationTime());
-                return history;
-            }).collect(Collectors.toList());
-            return new ResponseEntity<>(donationHistory, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("No donations found for this user", HttpStatus.NOT_FOUND);
-        }
+@GetMapping("/{userId}/history")
+public String getPaymentHistory(@PathVariable Integer userId, Model model) {
+    User user = urepo.findById(userId).orElseThrow(); // This will throw an exception if the user is not found
+    List<Donation> donations = user.getDonations();
+    if (!donations.isEmpty()) {
+        List<Map<String, Object>> donationHistory = donations.stream().map(donation -> {
+            Map<String, Object> history = new HashMap<>();
+            history.put("fullName", user.getFirstname() + " " + user.getLastname());
+            history.put("causeName", donation.getCause().getName());
+            history.put("payableAmount", donation.getPayableAmount());
+            history.put("donationTime", donation.getDonationTime());
+            return history;
+        }).collect(Collectors.toList());
+        model.addAttribute("donationHistory", donationHistory);
     } else {
-        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        model.addAttribute("message", "No donations found for this user !!");
     }
+    return "donationHistory"; // This should be the name of your Thymeleaf HTML file without the .html extension
 }
+
+
     
 }
 

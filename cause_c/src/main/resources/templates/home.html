@@ -31,11 +31,11 @@
     <h1>Welcome to Cause Connect</h1>
     <a href="/login">Login</a>
     <a href="/register">Register</a>
+    <a href="/admin/login">Admin Login</a> <!-- Added Admin Login link -->
+    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
     <h2>Causes</h2>
     <div th:each="cause : ${causes}" class="cause-box">
         <a th:href="@{home/cause/details(name=${cause.name})}">
-        
-
             <p th:text="${cause.name}">Cause Name</p>
         </a>
     </div>

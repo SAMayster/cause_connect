@@ -38,6 +38,9 @@ public class CauseController {
         model.addAttribute("causes", causes);
         return "cause";  // This should be the name of your Thymeleaf template
     }
+
+ 
+
     
 
     @GetMapping("/cause/details")
@@ -45,14 +48,17 @@ public class CauseController {
         Cause cause = crepo.findByName(name);
         DonationDto donationDto = new DonationDto();
         User user = (User) session.getAttribute("user");
-
+    
         donationDto.setName(cause.getName());
-        donationDto.setUser(user.getUid());
+        if (user != null) {
+            donationDto.setUser(user.getUid());
+        }
         
         model.addAttribute(donationDto);
         model.addAttribute("cause", cause);
         return "causedetails";  // This should be the name of your Thymeleaf template
     }
+
 
 
 }
