@@ -1,5 +1,7 @@
 package com.cause_connect.cause_c.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cause_connect.cause_c.model.Cause;
 import com.cause_connect.cause_c.model.Donation;
+import com.cause_connect.cause_c.model.DonationDto;
 import com.cause_connect.cause_c.model.User;
+import com.cause_connect.cause_c.repo.CauseRepo;
+import com.cause_connect.cause_c.repo.DonationRepo;
+import com.cause_connect.cause_c.repo.UserRepo;
 import com.cause_connect.cause_c.service.DonationService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,41 +34,36 @@ public class DonationController {
     @Autowired
     private DonationService donationservice;
 
+    @Autowired
+    private CauseRepo crepo;
+
+    @Autowired
+    private UserRepo urepo;
+    
+    @Autowired
+    private DonationRepo drepo;
     
     @GetMapping("/donate")
     public String showDonationForm(Model model) {
+   
     model.addAttribute("donation", new Donation());
-    return "donate"; // Name of the Thymeleaf view for the donation form
+    return "causedetails"; // Name of the Thymeleaf view for the donation form
 }
 
 @PostMapping("/donate")
-public ModelAndView addDonation(@RequestParam String causeName, @RequestParam String userId, @ModelAttribute Donation donation, HttpServletRequest request) {
-    // Get the user from the session
-    User user = (User) request.getSession().getAttribute("user");
-    System.out.println("User in session: " + user);
-
-    ModelAndView modelAndView = new ModelAndView();
-
-    if (user == null) {
-        // If the user is not logged in, redirect to the login page
-        modelAndView.addObject("message", "Please log in to make a donation");
-        modelAndView.setViewName("redirect:/login");
-    } else {
-        // If the user is logged in, proceed with the donation
-        donation.setUser(user);
-        ResponseEntity<?> response = donationservice.addDonation(causeName, donation, Integer.parseInt(userId));
-
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            modelAndView.addObject("message", "Thank you for your donation!");
-        } else {
-            modelAndView.addObject("message", response.getBody().toString());
-        }
-
-        modelAndView.setViewName("donationstatus");
-    }
-
-    return modelAndView;
+public String addDonation(@ModelAttribute DonationDto donationDto) {
+    Donation donation = new Donation();
+    User user = urepo.findById(donationDto.getUser()).get();
+    Cause cause = crepo.findByName(donationDto.getName());
+    donation.setPayableAmount(donationDto.getAmount());
+    donation.setUser(user);
+    donation.setCause(cause);
+    drepo.save(donation);
+    return "donationstatus";
 }
+
+
+
 
 
 

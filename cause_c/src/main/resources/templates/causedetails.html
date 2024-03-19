@@ -54,10 +54,10 @@
     <p th:text="${cause.description}">Cause Description</p>
 
     <!-- Updated form to use request parameters instead of path variables -->
-    <form action="#" th:action="@{/donate}" method="post">
-        <input type="hidden" name="causeName" th:value="${cause.name}" />
-        <input type="hidden" name="userId" th:value="${session.user != null ? session.user.uid : ''}" />
-        <input type="number" name="amount" min="1" required />
+    <form th:action="@{/donate}" method="post" th:object="${donationDto}">
+        <input type="hidden" name="causeName" th:field="${donationDto.name}" />
+        <input type="hidden" name="userId" th:field="${donationDto.user}"/>
+        <input type="number" name="amount" min="1"  th:field="${donationDto.amount}" required />
         <button type="submit">Donate</button>
     </form>
 

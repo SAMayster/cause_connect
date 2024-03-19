@@ -29,6 +29,7 @@ public class DonationService {
     public ResponseEntity<?> addDonation(String causeName, Donation donation, Integer userId) {
         Cause cause = crepo.findByName(causeName);
         Optional<User> userOptional = urepo.findById(userId);
+        System.out.println("XXXXXXXXXXXXXXXXXXX"+causeName + userId+ donation);
         if (cause != null && userOptional.isPresent()) {
             User user = userOptional.get();
             if (donation.getPayableAmount() <= cause.getGoalAmount()) {
@@ -51,7 +52,7 @@ public class DonationService {
     
 }
 
-    /* here .set for donation.setCause(cause); is done beacuse you just have ciause name as pathvariable not 
-     * cause obj so you have to set cause obj to donayion.
+    /* here .set for donation.setCause(cause); is done beacuse you just have cause name as pathvariable not 
+     * cause obj so you have to set cause obj to donation.
       */
 

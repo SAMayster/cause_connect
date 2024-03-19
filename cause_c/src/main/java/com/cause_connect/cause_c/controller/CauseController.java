@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cause_connect.cause_c.model.Cause;
+import com.cause_connect.cause_c.model.DonationDto;
+import com.cause_connect.cause_c.model.User;
 import com.cause_connect.cause_c.repo.CauseRepo;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping({ "/home" })
@@ -37,8 +41,15 @@ public class CauseController {
     
 
     @GetMapping("/cause/details")
-    public String showCauseDetails(@RequestParam String name, Model model) {
+    public String showCauseDetails(@RequestParam String name, Model model, HttpSession session) {
         Cause cause = crepo.findByName(name);
+        DonationDto donationDto = new DonationDto();
+        User user = (User) session.getAttribute("user");
+
+        donationDto.setName(cause.getName());
+        donationDto.setUser(user.getUid());
+        
+        model.addAttribute(donationDto);
         model.addAttribute("cause", cause);
         return "causedetails";  // This should be the name of your Thymeleaf template
     }
