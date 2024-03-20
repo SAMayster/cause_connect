@@ -17,7 +17,7 @@ import com.cause_connect.cause_c.repo.CauseRepo;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping({ "/home" })
+@RequestMapping({ "/home" ,""})
 public class CauseController {
 
     @Autowired

@@ -2,65 +2,54 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Admin Page</title>
-    <style>
-        /* Add your CSS here */
-    </style>
 </head>
 <body>
-    <h2>Add a Cause</h2>
-    <form id="addCauseForm">
-        <label for="name">Cause Name:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <!-- Add more fields as needed -->
-        <input type="submit" value="Submit">
+    <h1>Admin Page</h1>
+
+    <h2>Add Cause</h2>
+    <form action="#" th:action="@{/admin/addcause}" method="post">
+        <input type="text" name="name" placeholder="Enter cause name" required>
+        <textarea name="description" placeholder="Enter cause description" required></textarea>
+        <input type="number" name="goalAmount" placeholder="Enter goal amount" required>
+        <input type="number" name="amountRaised" placeholder="Enter amount raised" required>
+        <button type="submit">Add Cause</button>
     </form>
 
-    <h2>Delete a Cause</h2>
-    <form id="deleteCauseForm">
-        <label for="causeName">Cause Name:</label><br>
-        <input type="text" id="causeName" name="causeName"><br>
-        <input type="submit" value="Delete">
-    </form>
+<!--
+    <h2>Delete Cause</h2>
+    <div th:if="${causes != null}">
+        <ul>
+            <li th:each="cause : ${causes}">
+                <span th:text="${cause.name}"></span>
+                <form action="#" th:action="@{/admin/deletecause/{name}(name=${cause.name})}" method="post">
+                    <input type="hidden" name="_method" value="delete" />
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+    <div th:if="${causes == null}">
+        <p>No causes found.</p>
+    </div>
 
-    <script>
-        document.getElementById('addCauseForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var causeName = document.getElementById('name').value;
-            // Add more fields as needed
-            fetch('/addcause', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: causeName }), // Adjust this to match your Cause object
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('Cause added successfully');
-                // You might want to do something with the response here
-            })
-            .catch((error) => {
-                alert('An error occurred');
-                // You might want to do something with the error here
-            });
-        });
-
-        document.getElementById('deleteCauseForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var causeName = document.getElementById('causeName').value;
-            fetch('/deletecause/' + causeName, {
-                method: 'DELETE',
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('Cause deleted successfully');
-                // You might want to do something with the response here
-            })
-            .catch((error) => {
-                alert('An error occurred');
-                // You might want to do something with the error here
-            });
-        });
-    </script>
+    <h2>All Donations</h2>
+    <div th:if="${donations != null}">
+        <ul>
+            <li th:each="donation : ${donations}">
+                <span th:text="${donation.name}"></span>
+            </li>
+        </ul>
+    </div>
+    <div th:if="${donations == null}">
+        <p>No donations found.</p>
+    </div>
 </body>
 </html>
+
+
+
+LEARNINGS:
+19-03-24
+
+1) Used hidden above delete button because html forms only support GET and Post Mappings.
+-->

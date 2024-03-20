@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Page</title>
+</head>
+<body>
+    <h1>Admin Page</h1>
+
+    <h2>Options</h2>
+    <ul>
+        <li><a th:href="@{/admin/addcause}">Add Cause</a></li>
+        <li><a th:href="@{/admin/deletecause}">Delete Cause</a></li>
+        <li><a th:href="@{/admin/history}">View History</a></li>
+    </ul>
+    <button onclick="location.href='/admin/logout'">Logout</button>
+</body>
+</html>

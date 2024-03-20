@@ -49,23 +49,40 @@ public class DonationController {
     }
 
     @PostMapping("/donate")
-    public String addDonation(@ModelAttribute DonationDto donationDto, HttpSession session) {
+    public String addDonation(@ModelAttribute DonationDto donationDto, HttpSession session, Model model) {
         // Check if user is logged in
         if (session.getAttribute("user") == null) {
             // User is not logged in, redirect to home page
             return "redirect:/home";
         }
-
+    
         // User is logged in, proceed with donation
         Donation donation = new Donation();
         User user = urepo.findById(donationDto.getUser()).get();
         Cause cause = crepo.findByName(donationDto.getName());
+    
+        // Check if donation amount exceeds goal amount
+        if (donationDto.getAmount() > cause.getGoalAmount()) {
+            model.addAttribute("donationDto", donationDto);
+            model.addAttribute("cause", cause);
+            return "donationstatus"; // Return to the donation status page
+        }
+    
+        // Update the amount raised for the cause
+        cause.setAmountRaised(cause.getAmountRaised() + donationDto.getAmount());
+        crepo.save(cause); // Save the updated cause
+    
         donation.setPayableAmount(donationDto.getAmount());
         donation.setUser(user);
         donation.setCause(cause);
+        donation.setAmountRaisedTillNow(cause.getAmountRaised());
         drepo.save(donation);
+    
+        model.addAttribute("donationDto", donationDto);
+        model.addAttribute("cause", cause);
         return "donationstatus";
     }
+    
 
     // @PostMapping("/donate")
     // public String addDonation(@ModelAttribute Donation donation,

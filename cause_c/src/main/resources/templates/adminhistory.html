@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Donations</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h2>All Donations</h2>
+    <p th:text="${message}"></p>
+    <div th:if="${!#lists.isEmpty(allUsersDonationHistory)}">
+        <table>
+            <tr>
+                <th>Full Name</th>
+                <th>Cause Name</th>
+                <th>Payable Amount</th>
+                <th>Donation Time</th>
+            </tr>
+            <tr th:each="donationHistory : ${allUsersDonationHistory}">
+                <td th:text="${donationHistory.fullName}"></td>
+                <td th:text="${donationHistory.causeName}"></td>
+                <td th:text="${donationHistory.payableAmount}"></td>
+                <td th:text="${#dates.format(donationHistory.donationTime, 'dd-MM-yyyy HH:mm')}"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+
+
+
+

@@ -7,5 +7,6 @@ import com.cause_connect.cause_c.model.Cause;
 public interface CauseRepo extends JpaRepository<Cause, Integer>{
 
     Cause findByName(String name);
+    Cause findById(int id);
     
 }

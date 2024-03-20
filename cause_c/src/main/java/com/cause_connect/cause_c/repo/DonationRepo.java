@@ -13,6 +13,9 @@ public interface DonationRepo extends JpaRepository<Donation, Integer> {
     
     @Query("SELECT d FROM Donation d LEFT JOIN FETCH d.user LEFT JOIN FETCH d.cause")
     List<Donation> findAllWithUsersAndCauses();
+
+    @Query("SELECT d FROM Donation d LEFT JOIN FETCH d.user LEFT JOIN FETCH d.cause")
+    List<Donation> findAllWithUsersAndCausesForAdmin();
 }
 
     

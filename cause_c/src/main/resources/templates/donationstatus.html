@@ -7,6 +7,7 @@
     <h1>Donation Status</h1>
 
     <!-- Display the message -->
-    <p>___________________________________SUCCESS__________________________________</p>
+    <p th:if="${donationDto.amount <= cause.goalAmount}">___________________________________SUCCESS__________________________________</p>
+    <p th:if="${donationDto.amount > cause.goalAmount}">___________________________________FAILURE: Donation amount exceeds goal amount__________________________________</p>
 </body>
 </html>

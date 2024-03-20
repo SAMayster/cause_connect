@@ -34,6 +34,9 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonIgnoreProperties("user") // Ignore 'user' property in Donation entity
     private List<Donation> donations;   
-}
 
+    public String getFullName() {
+     return firstname + " " + lastname;
+}
+}
 /*learn about @jsonbackref and @jsonmanageref */

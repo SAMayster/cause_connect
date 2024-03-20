@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Cause</title>
+</head>
+<body>
+    <h2>Add Cause</h2>
+    <form id="addCauseForm" action="#" th:action="@{/admin/addcause}" method="post">
+        <input type="text" name="name" placeholder="Enter cause name" required>
+        <textarea name="description" placeholder="Enter cause description" required></textarea>
+        <input type="number" name="goalAmount" placeholder="Enter goal amount" required>
+        <button type="submit">Add Cause</button>
+    </form>
+</body>
+</html>
+
+
