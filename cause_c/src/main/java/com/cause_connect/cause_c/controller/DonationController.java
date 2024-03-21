@@ -1,5 +1,6 @@
 package com.cause_connect.cause_c.controller;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,13 @@ public class DonationController {
         Donation donation = new Donation();
         User user = urepo.findById(donationDto.getUser()).get();
         Cause cause = crepo.findByName(donationDto.getName());
-    
+
+        // Check if the goal amount has been reached or exceeded
+        if (cause.getAmountRaised() >= cause.getGoalAmount()) {
+            model.addAttribute("goalReachedMessage", "The cause has already raised the required amount. No further donations are needed.");
+            return "donationstatus";
+        }
+
         // Check if donation amount exceeds goal amount
         if (donationDto.getAmount() > cause.getGoalAmount()) {
             model.addAttribute("donationDto", donationDto);
@@ -70,6 +77,7 @@ public class DonationController {
     
         // Update the amount raised for the cause
         cause.setAmountRaised(cause.getAmountRaised() + donationDto.getAmount());
+        cause.setLastDonationDate(new Date());
         crepo.save(cause); // Save the updated cause
     
         donation.setPayableAmount(donationDto.getAmount());
@@ -77,6 +85,10 @@ public class DonationController {
         donation.setCause(cause);
         donation.setAmountRaisedTillNow(cause.getAmountRaised());
         drepo.save(donation);
+
+        if (cause.getAmountRaised() >= cause.getGoalAmount()) {
+            model.addAttribute("goalReachedMessage", "Congratulations! The cause has raised the required amount.");
+        }
     
         model.addAttribute("donationDto", donationDto);
         model.addAttribute("cause", cause);

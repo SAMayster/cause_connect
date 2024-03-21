@@ -67,6 +67,11 @@
     <!-- Display the amount raised and goal amount -->
     <p th:text="'Amount Raised: ' + ${cause.amountRaised}">Amount Raised</p>
     <p th:text="'Goal Amount: ' + ${cause.goalAmount}">Goal Amount</p>
+    <p th:if="${cause.amountRaised >= cause.goalAmount}" style="color: red;">The fundraising goal has been reached! Thank you for your support.</p>
+
+    <!-- Display the creation date and last donation date -->
+    <p th:text="'Creation Date: ' + ${#dates.format(cause.creationDate, 'dd-MM-yyyy')}">Creation Date</p>
+    <p th:text="'Last Donation Date: ' + ${#dates.format(cause.lastDonationDate, 'dd-MM-yyyy')}">Last Donation Date</p>
 
     <!-- Hidden input field to store user -->
     <input type="hidden" id="user" th:value="${session.user != null ? session.user.uid : ''}" />
@@ -75,10 +80,11 @@
         <input type="hidden" name="causeName" th:field="${donationDto.name}" />
         <input type="hidden" name="userId" th:field="${donationDto.user}"/>
         <input type="number" name="amount" min="1"  th:field="${donationDto.amount}" required />
-        <button type="submit">Donate</button>
+        <button type="submit" th:disabled="${cause.amountRaised >= cause.goalAmount}">Donate</button>
     </form>
 </body>
 </html>
+
 
 
 

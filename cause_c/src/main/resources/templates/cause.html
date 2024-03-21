@@ -1,4 +1,55 @@
+
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home Page For Logged In User</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div th:if="${session.user != null}">
+            <h1 class="text-center my-4">Welcome to Cause Connect</h1>
+            <p>Welcome, <span th:text="${session.user?.firstname}">User</span>!</p>
+            <p>Your User ID: <span th:text="${session.user?.uid}">ID</span></p>
+            <div class="d-flex justify-content-around mb-4">
+                <a href="/logout" class="btn btn-primary">Logout</a>
+                <a th:href="'/' + ${session.user?.uid} + '/history'" class="btn btn-primary">Donation History</a>
+            </div>
+        </div>
+        <div th:unless="${session.user != null}">
+            <a href="/login" class="btn btn-primary">Login</a>
+        </div>
+        <h2 class="text-center my-4">Causes</h2>
+        <div class="row">
+            <div th:each="cause : ${causes}" class="col-md-4">
+                <div th:if="${cause.amountRaised < cause.goalAmount}" class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a th:href="@{/home/cause/details(name=${cause.name})}" th:text="${cause.name}">Cause Name</a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="text-center my-4">Successful Causes</h2>
+        <div class="row">
+            <div th:each="cause : ${causes}" class="col-md-4">
+                <div th:if="${cause.amountRaised >= cause.goalAmount}" class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a th:href="@{/home/cause/details(name=${cause.name})}" th:text="${cause.name}">Cause Name</a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- "2"
+    <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home Page</title>
@@ -45,10 +96,11 @@
 </body>
 </html>
 
+-->
 
 
-
-<!-- <!DOCTYPE html>
+<!-- "1" 
+    <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home Page</title>

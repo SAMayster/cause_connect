@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <title>Home Page</title>
-    <style>
-        .cause-box {
-            width: 200px;
-            height: 200px;
-            border: 1px solid black;
-            margin: 10px;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .cause-box img {
-            width: 100%;
-            height: 70%;
-        }
-
-        .cause-box p {
-            margin: 0;
-            height: 30%;
-            line-height: 30px;
-            /* Vertically center the text */
-        }
-    </style>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
-
 <body>
-    <h1>Welcome to Cause Connect</h1>
-    <a href="/login">Login</a>
-    <a href="/register">Register</a>
-    <a href="/admin/login">Admin Login</a> <!-- Added Admin Login link -->
-    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
-    <h2>Causes</h2>
-    <div th:each="cause : ${causes}" class="cause-box">
-        <a th:href="@{home/cause/details(name=${cause.name})}">
-            <p th:text="${cause.name}">Cause Name</p>
-        </a>
+    <div class="container">
+        <h1 class="text-center my-4">Welcome to Cause Connect</h1>
+        <div class="d-flex justify-content-around mb-4">
+            <a href="/login" class="btn btn-primary">Login</a>
+            <a href="/register" class="btn btn-primary">Register</a>
+            <a href="/admin/login" class="btn btn-primary">Admin Login</a>
+        </div>
+        <p th:if="${error}" th:text="${error}" class="text-danger"></p>
+        <h2 class="text-center my-4">Causes</h2>
+        <div class="row">
+            <div th:each="cause : ${causes}" class="col-md-4">
+                <div th:if="${cause.amountRaised < cause.goalAmount}" class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a th:href="@{home/cause/details(name=${cause.name})}" th:text="${cause.name}">Cause Name</a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="text-center my-4">Successful Causes</h2>
+        <div class="row">
+            <div th:each="cause : ${causes}" class="col-md-4">
+                <div th:if="${cause.amountRaised >= cause.goalAmount}" class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a th:href="@{home/cause/details(name=${cause.name})}" th:text="${cause.name}">Cause Name</a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
-
 </html>
+
