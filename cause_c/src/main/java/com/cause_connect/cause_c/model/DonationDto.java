@@ -8,4 +8,8 @@ public class DonationDto {
     private int user;
     private int amount;
 
+   
+    
+    
+
 }

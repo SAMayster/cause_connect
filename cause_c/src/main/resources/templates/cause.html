@@ -1,52 +1,242 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home Page For Logged In User</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Import Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+        html {
+            height:100%;
+            background-image: linear-gradient(to right top, #8e44ad 0%, #3498db 100%);
+        }
+
+        nav {
+            max-width: 920px;
+            mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #ffffff 25%, #ffffff 75%, rgba(255, 255, 255, 0) 100%);
+            margin: 0 auto;
+            padding: 15px 0;
+        }
+
+        nav ul {
+            text-align: center;
+            background: linear-gradient(90deg, rgba(236, 231, 231, 0) 0%, rgba(234, 240, 241, 0.2) 25%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0) 100%);
+            box-shadow: 0 0 25px rgba(172, 217, 235, 0.1), inset 0 0 1px rgba(197, 226, 232, 0.2);
+        }
+
+        nav ul li {
+            display: inline-block;
+        }
+
+        nav ul li a, nav ul li span {
+            padding: 18px;
+            font-family: "Open Sans";
+            text-transform:uppercase;
+            color: rgba(233, 235, 239, 0.5);
+            font-size: 18px;
+            text-decoration: none;
+            display: block;
+        }
+
+        nav ul li a:hover, nav ul li span:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(237, 234, 51, 0.833);
+        }
+
+        /* New styles */
+        .typing {
+            color: #fff;
+            font-family: 'Monospace', monospace;
+            overflow: hidden;
+            /* Ensures the content is not revealed until the animation */
+            /*border-right: .15em solid transparent;  /*The typwriter cursor */
+            white-space: nowrap;
+            /* Keeps the content on a single line */
+            margin: 0 auto;
+            /* Gives that scrolling effect as the typing happens */
+            letter-spacing: .15em;
+            /* Adjust as needed */
+            position: relative;
+            bottom: 40px;
+            animation:
+                typing 3.5s steps(40, end);
+            /* blink-caret .75s step-end infinite;  */
+        }
+
+
+        /* The typing effect */
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        /* New styles */
+
+
+        .welcome-message:hover {
+            background-color: transparent;
+            /* changes to white on hover */
+            color: rgb(105, 199, 22);
+            /* text color changes to black on hover */
+        }
+
+        body{
+    background-color: #080710;
+}
+.background{
+    width: 430px;
+    height: 520px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+}
+.background .shape{
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    border-radius: 50%;
+}
+.shape:first-child{
+    background: linear-gradient(
+        #1845ad,
+        #23a2f6
+    );
+    left: -80px;
+    top: -80px;
+}
+.shape:last-child{
+    background: linear-gradient(
+        to right,
+        #ff512f,
+        #f09819
+    );
+    right: -30px;
+    bottom: -80px;
+}
+
+        .col-md-4 {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .cause-box {
+            width: 200px;
+            height: 200px;
+            border: 2px solid transparent;
+            background-color: transparent;
+            transition: border 0.3s ease;
+            position: relative;
+            padding: 10px;
+        }
+
+        .cause-box:hover {
+            border-color: rgba(237, 234, 51, 0.833);
+            background-color: black;
+        }
+
+        .card-body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+             /* This will stack the items vertically */
+        }
+
+        .card-title {
+            text-align: center; 
+            color: hsl(60, 73%, 51%);
+            font-family: "Poppins", sans-serif;
+            /* Add this */
+        }
+
+        .card-title:hover {
+            text-align: center; 
+            color: hsl(60, 20%, 96%);
+            /* Add this */
+        }
+
+        .text-center.my-4.custom{
+            color: rgb(247, 249, 245);
+            font-family: 'Monospace', monospace;
+            font-weight: Bold;
+            font-size: 50px;
+            
+        }
+        .text-center.my-4.custom:hover {
+            background-color: transparent; /* changes to white on hover */
+            color: rgb(105, 199, 22);
+            /* Add this */
+        }
+
+        .card-img-top {
+            margin-bottom: 10px; /* Add this to create a gap between the image and the cause name */
+        }
+    </style>
 </head>
 <body>
+    <nav>
+        <ul>
+            <li>
+                <a th:href="'/' + ${session.user?.uid} + '/history' " style="text-decoration: none;">Donation History</a>
+            </li>
+            <li>
+                <a href="/logout" style="text-decoration: none;" >Logout</a>
+            </li>
+            <li>
+                <span th:text="${session.user?.firstname}" style="text-decoration: none;">User</span>
+            </li>
+        </ul>
+    </nav>
     <div class="container">
-        <div th:if="${session.user != null}">
-            <h1 class="text-center my-4">Welcome to Cause Connect</h1>
-            <p>Welcome, <span th:text="${session.user?.firstname}">User</span>!</p>
-            <p>Your User ID: <span th:text="${session.user?.uid}">ID</span></p>
-            <div class="d-flex justify-content-around mb-4">
-                <a href="/logout" class="btn btn-primary">Logout</a>
-                <a th:href="'/' + ${session.user?.uid} + '/history'" class="btn btn-primary">Donation History</a>
-            </div>
-        </div>
-        <div th:unless="${session.user != null}">
-            <a href="/login" class="btn btn-primary">Login</a>
-        </div>
-        <h2 class="text-center my-4">Causes</h2>
+        <h1 class="text-center my-4 welcome-message typing">Welcome to Cause Connect</h1>
         <div class="row">
-            <div th:each="cause : ${causes}" class="col-md-4">
-                <div th:if="${cause.amountRaised < cause.goalAmount}" class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a th:href="@{/home/cause/details(name=${cause.name})}" th:text="${cause.name}">Cause Name</a>
-                        </h5>
-                    </div>
+            <div th:each="cause : ${activeCauses}" class="col-md-4">
+                <div class="card mb-4 cause-box">
+                    <a th:href="@{/home/cause/details(id=${cause.cid})}" style="text-decoration: none; color: inherit;">
+                        <div class="card-body">
+                            <img th:src="@{'/Images/' + ${cause.imageUrl}}" alt="Cause Image" class="card-img-top">
+                            <h5 class="card-title" th:text="${cause.name}">Cause Name</h5>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
-        <h2 class="text-center my-4">Successful Causes</h2>
+        </div>
+        <h2 class="text-center my-4 custom">Successful Causes</h2>
         <div class="row">
-            <div th:each="cause : ${causes}" class="col-md-4">
-                <div th:if="${cause.amountRaised >= cause.goalAmount}" class="card mb-4">
+            <div th:each="cause : ${successfulCauses}" class="col-md-4">
+                <div class="card mb-4 cause-box">
+                    <a th:href="@{/home/cause/details(id=${cause.cid})}" style="text-decoration: none; color: inherit;">
                     <div class="card-body">
-                        <h5 class="card-title">
-                            <a th:href="@{/home/cause/details(name=${cause.name})}" th:text="${cause.name}">Cause Name</a>
-                        </h5>
+                        <img th:src="@{'/Images/' + ${cause.imageUrl}}" alt="Cause Image" class="card-img-top">
+                        <h5 class="card-title" th:text="${cause.name}">Cause Name</h5>
+            
+                        
                     </div>
+                </a>
                 </div>
             </div>
         </div>
     </div>
 </body>
 </html>
+
+
+
+
+
 
 <!-- "2"
     <!DOCTYPE html>

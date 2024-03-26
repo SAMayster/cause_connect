@@ -22,6 +22,11 @@ public interface UserRepo extends JpaRepository<User, Integer>{
 
 
 
+
+
+
+
+
 /*
 LEARNINGS :
 optional is used if user exists than it will return that details and if not exists will 

@@ -2,12 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Donation Status</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #080710;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: sans-serif;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            width: 300px;
+            box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+        }
+        .home-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            margin-top: 20px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
-    <h1>Donation Status</h1>
+    <div class="glass">
+        <h1>Donation Status</h1>
 
-    <!-- Display the message -->
-    <p th:if="${donationDto.amount <= cause.goalAmount}">___________________________________SUCCESS__________________________________</p>
-    <p th:if="${donationDto.amount > cause.goalAmount}">___________________________________FAILURE: Donation amount exceeds goal amount__________________________________</p>
+        <!-- Display the message -->
+        <p th:if="${donationDto.amount <= cause.goalAmount}">SUCCESS</p>
+        <p th:if="${donationDto.amount > cause.goalAmount}">FAILURE: Donation amount exceeds goal amount</p>
+
+        <!-- Home button -->
+        <a href="/home/cause" class="home-button">Home</a>
+    </div>
 </body>
 </html>

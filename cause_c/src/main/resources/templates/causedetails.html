@@ -46,44 +46,184 @@
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title th:text="${cause.name}">Cause Name</title>
-    <script>
-        function checkLoginAndSubmit(event) {
-            var user = document.getElementById('user').value;
-            if (user == '') {
-                // User is not logged in, display alert
-                alert('Please log in to make a donation.');
-                event.preventDefault();  // Prevent form from submitting
-                window.location.href = '/login';
+    <head>
+        <title th:text="${cause.name}">Cause Name</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="path_to_your_custom_css_file.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+        <style media="screen">
+            body{
+                background-color: #080710;
+                padding-top: 20px; 
             }
-        }
-    </script>
-</head>
-<body>
-    <h1 th:text="${cause.name}">Cause Name</h1>
-    <p th:text="${cause.description}">Cause Description</p>
+            .background{
+                width: 430px;
+                height: 520px;
+                position: absolute;
+                transform: translate(-50%,-50%);
+                left: 50%;
+                top: 50%;
+            }
+            .background .shape{
+                height: 200px;
+                width: 200px;
+                position: absolute;
+                border-radius: 50%;
+            }
+            .shape:first-child{
+                background: linear-gradient(
+                    #1845ad,
+                    #23a2f6
+                );
+                left: -400px;
+                top: -80px;
+            }
+            .shape:last-child{
+                background: linear-gradient(
+                    to right,
+                    #ff512f,
+                    #f09819
+                );
+                right: 350px;
+                bottom: -100px;
+            }
+            /* Add the CSS styles from the Glassmorphism login form here */
+            /* ... */
 
-    <!-- Display the amount raised and goal amount -->
-    <p th:text="'Amount Raised: ' + ${cause.amountRaised}">Amount Raised</p>
-    <p th:text="'Goal Amount: ' + ${cause.goalAmount}">Goal Amount</p>
-    <p th:if="${cause.amountRaised >= cause.goalAmount}" style="color: red;">The fundraising goal has been reached! Thank you for your support.</p>
+            .cause-page .form .mb-4 h3 {
+    margin-top: 20px; /* Adjust this value as per your needs */
+    
+}
 
-    <!-- Display the creation date and last donation date -->
-    <p th:text="'Creation Date: ' + ${#dates.format(cause.creationDate, 'dd-MM-yyyy')}">Creation Date</p>
-    <p th:text="'Last Donation Date: ' + ${#dates.format(cause.lastDonationDate, 'dd-MM-yyyy')}">Last Donation Date</p>
 
-    <!-- Hidden input field to store user -->
-    <input type="hidden" id="user" th:value="${session.user != null ? session.user.uid : ''}" />
+        .cause-page .form {
+        height: auto;
+        width: 400px;
+        background-color: rgba(255,255,255,0.13);
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top: 80%;
+        left: 50%;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255,255,255,0.1);
+        box-shadow: 0 0 40px rgba(8,7,16,0.6);
+        padding: 500px 35px 20px 35px;
+        margin-top: 100px;
+      }
 
-    <form th:action="@{/donate}" method="post" th:object="${donationDto}" onsubmit="checkLoginAndSubmit(event);">
-        <input type="hidden" name="causeName" th:field="${donationDto.name}" />
-        <input type="hidden" name="userId" th:field="${donationDto.user}"/>
-        <input type="number" name="amount" min="1"  th:field="${donationDto.amount}" required />
-        <button type="submit" th:disabled="${cause.amountRaised >= cause.goalAmount}">Donate</button>
-    </form>
+
+
+      .cause-page .form * {
+        font-family: 'Poppins',sans-serif;
+        color: #ffffff;
+        letter-spacing: 0.5px;
+        outline: none;
+        border: none;
+      }
+
+      .cause-page .form p {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 30px;
+        text-align: left;
+        
+      }
+
+      .cause-page .form input {
+        display: block;
+        height: 50px;
+        width: 100%;
+        background-color: rgba(255,255,255,0.07);
+        border-radius: 3px;
+        padding: 0 10px;
+        margin-top: 8px;
+        font-size: 14px;
+        font-weight: 300;
+      }
+      
+
+      .cause-page .form button {
+        margin-top: 20px;
+        width: 100%;
+        background-color: #ffffff;
+        color: #080710;
+        padding: 15px 0;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+        </style>
+        <script>
+            
+            function checkLoginAndSubmit(event) {
+                var user = document.getElementById('userId').value;
+                
+                if (user == '' || user == '0') {  // Check if user ID is empty or 0
+                    
+                    // User is not logged in, display alert
+                    alert('Please log in to make a donation.');
+                    event.preventDefault();  // Prevent form from submitting
+                    window.location.href = '/login';
+                }
+            }
+        </script>
+        ``
+        
+    </head>
+    <body>
+    <div class="background">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <!-- Left side box for cause image and name -->
+            <div class="col-md-7 col-lg-4 mb-5 mb-lg-0 wow fadeIn">
+                <div class="card border-0 shadow">
+                    <div class="cause-page">
+                        <div class="form">
+                            <img th:src="@{'/Images/' + ${cause.imageUrl}}" alt="Cause Image" class="card-img-top">
+                            <div class="mb-4">
+                                <h3 class="h4 mb-0" th:text="${cause.name}">Cause Name</h3>
+                                <br>
+                                <span class="text-primary">Goal Amount: </span><span th:text="${cause.goalAmount}">Goal Amount</span>
+                            </div>
+                            <p th:text="'Amount Raised: ' + ${cause.amountRaised}">Amount Raised</p>
+                            <p th:text="'Creation Date: ' + ${#dates.format(cause.creationDate, 'dd-MM-yyyy')}">Creation Date</p>
+                            <p th:text="'Last Donation Date: ' + ${#dates.format(cause.lastDonationDate, 'dd-MM-yyyy')}">Last Donation Date</p>
+                            <!-- Donation form -->
+                            <form th:action="@{/donate}" method="post" th:object="${donationDto}" onsubmit="checkLoginAndSubmit(event);">
+                                <input type="hidden" name="causeName" th:field="${donationDto.name}" />
+                                <input type="hidden" name="userId" id="userId"  th:field="${donationDto.user}"/>
+                                <div class="form-group">
+                                    <label for="amount">Amount</label>
+                                    <input type="number" name="amount" min="1"  th:field="${donationDto.amount}" required class="form-control" id="amount" />
+                                </div>
+                                <button type="submit" th:disabled="${cause.amountRaised >= cause.goalAmount}" class="btn btn-primary">Donate</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Right side box for cause details -->
+            <div class="col-lg-8">
+                <div class="ps-lg-1-6 ps-xl-5">
+                    <div class="mb-5 wow fadeIn">
+                        <p th:utext="${cause.description}">Cause Description</p>
+                        <p th:if="${cause.amountRaised >= cause.goalAmount}" style="color: red;">The fundraising goal has been reached! Thank you for your support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
+    
 </html>
+
 
 
 
@@ -98,5 +238,9 @@
         <button type="submit">Donate</button>
     </form>
 -->
-<!-- Always display the donation form -->
+<!-- LEARNING:
+    24/03/24
+    1) Use th :utext for displaying text of html format
+
+-->
 

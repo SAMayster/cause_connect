@@ -1,35 +1,29 @@
 package com.cause_connect.cause_c.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.cause_connect.cause_c.model.Admin;
 import com.cause_connect.cause_c.model.Cause;
-import com.cause_connect.cause_c.model.Donation;
-import com.cause_connect.cause_c.model.DonationHistory;
-import com.cause_connect.cause_c.model.User;
 import com.cause_connect.cause_c.repo.CauseRepo;
-import com.cause_connect.cause_c.repo.DonationRepo;
 import com.cause_connect.cause_c.repo.UserRepo;
 import com.cause_connect.cause_c.service.AdminService;
 import com.cause_connect.cause_c.service.UserService;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.io.IOException;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -88,11 +82,36 @@ public class AdminController {
     }
     
     @PostMapping("/addcause")
-    public String addCause(@ModelAttribute Cause cause, Model model, RedirectAttributes redirectAttributes) {
-        String message = adminService.addCause(cause);
-        redirectAttributes.addFlashAttribute("message", message);
-        return "redirect:/admin/adminfeature";
+public String addCause(@ModelAttribute Cause cause, @RequestParam("image") MultipartFile image, Model model, RedirectAttributes redirectAttributes) {
+    if (!image.isEmpty()) {
+        String imageName = cause.getName() + ".jpg";
+        cause.setImageUrl(imageName);
+
+        // Save the image file to the 'images' directory
+        try {
+            byte[] bytes = image.getBytes();
+            Path path = Paths.get("Images/" + imageName);
+            System.out.println("Writing to filexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: " + path.toAbsolutePath());
+           
+            if (!Files.exists(path)) {
+                    Files.createDirectories(path.getParent());
+                                }
+                    Files.write(path, bytes);
+
+        }catch (IOException e) {
+            // Handle the case where the image file could not be saved
+            System.out.println("Error saving image file XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: " + e.getMessage());
+            e.printStackTrace();
+            return "An error occurred while saving the image";
+        }
     }
+    String message = adminService.addCause(cause);
+    redirectAttributes.addFlashAttribute("message", message);
+    return "redirect:/admin/adminfeature";
+}
+
+    
+    
     
     @GetMapping("/deletecause")
     public String deleteCausePage(Model model) {
