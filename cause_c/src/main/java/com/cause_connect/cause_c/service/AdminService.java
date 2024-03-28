@@ -1,7 +1,6 @@
 package com.cause_connect.cause_c.service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,15 +9,14 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-
 import com.cause_connect.cause_c.model.Cause;
 import com.cause_connect.cause_c.model.Donation;
-import com.cause_connect.cause_c.model.DonationHistory;
 import com.cause_connect.cause_c.model.User;
 import com.cause_connect.cause_c.repo.CauseRepo;
 import com.cause_connect.cause_c.repo.DonationRepo;
 import com.cause_connect.cause_c.repo.UserRepo;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AdminService {
@@ -45,11 +43,15 @@ public class AdminService {
         }
     }
 
+    @Transactional
     public String deleteCause(int id) {
         Cause cause = crepo.findById(id);
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"+ cause);
 
         if (cause != null) {
+
             crepo.delete(cause);
+            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             return "Deleted!!";
         } else {
             return "Not Deleted!!";

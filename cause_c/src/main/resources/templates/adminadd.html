@@ -112,7 +112,7 @@
             <!-- Create the editor container -->
             <div id="editor" placeholder="Enter cause description" required></div>
             <!-- Hidden input field to store the Quill editor content -->
-            <input type="hidden" name="description" id="description " placeholder="Enter cause description">
+            <input type="hidden" name="description" id="description" placeholder="Enter cause description">
         </form>
     </div>
     <!-- Include the Quill library -->
@@ -124,8 +124,8 @@
       });
       // Update the hidden input field with the Quill editor content when the form is submitted
       document.getElementById('addCauseForm').onsubmit = function() {
-        document.getElementById('description').value = quill.root.innerHTML;
-      };
+    document.getElementById('description').value = quill.root.innerHTML;
+};
     </script>
 </body>
 </html>

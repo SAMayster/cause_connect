@@ -24,7 +24,6 @@ import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
 
-
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -80,39 +79,35 @@ public class AdminController {
         model.addAttribute("cause", new Cause());
         return "adminadd";
     }
-    
+
     @PostMapping("/addcause")
-public String addCause(@ModelAttribute Cause cause, @RequestParam("image") MultipartFile image, Model model, RedirectAttributes redirectAttributes) {
-    if (!image.isEmpty()) {
-        String imageName = cause.getName() + ".jpg";
-        cause.setImageUrl(imageName);
+    public String addCause(@ModelAttribute Cause cause, @RequestParam("image") MultipartFile image, Model model,
+            RedirectAttributes redirectAttributes) {
+        if (!image.isEmpty()) {
+            String imageName = cause.getName() + ".jpg";
+            cause.setImageUrl(imageName);
 
-        // Save the image file to the 'images' directory
-        try {
-            byte[] bytes = image.getBytes();
-            Path path = Paths.get("Images/" + imageName);
-            System.out.println("Writing to filexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: " + path.toAbsolutePath());
-           
-            if (!Files.exists(path)) {
+            // Save the image file to the 'images' directory
+            try {
+                byte[] bytes = image.getBytes();
+                Path path = Paths.get("Images/" + imageName);
+
+                if (!Files.exists(path)) {
                     Files.createDirectories(path.getParent());
-                                }
-                    Files.write(path, bytes);
+                }
+                Files.write(path, bytes);
 
-        }catch (IOException e) {
-            // Handle the case where the image file could not be saved
-            System.out.println("Error saving image file XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: " + e.getMessage());
-            e.printStackTrace();
-            return "An error occurred while saving the image";
+            } catch (IOException e) {
+                // Handle the case where the image file could not be saved
+
+                return "An error occurred while saving the image";
+            }
         }
+        String message = adminService.addCause(cause);
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/admin/adminfeature";
     }
-    String message = adminService.addCause(cause);
-    redirectAttributes.addFlashAttribute("message", message);
-    return "redirect:/admin/adminfeature";
-}
 
-    
-    
-    
     @GetMapping("/deletecause")
     public String deleteCausePage(Model model) {
         List<Cause> causes = crepo.findAll();
@@ -140,7 +135,7 @@ public String addCause(@ModelAttribute Cause cause, @RequestParam("image") Multi
     @GetMapping("/history")
     public String getAllUsersPaymentHistory(Model model) {
         List<Map<String, Object>> allUsersDonationHistory = adminService.getAllUsersPaymentHistory();
-    
+
         if (!allUsersDonationHistory.isEmpty()) {
             model.addAttribute("allUsersDonationHistory", allUsersDonationHistory);
         } else {

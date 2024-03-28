@@ -20,7 +20,7 @@ public class Donation {
     @JsonIgnoreProperties("donations") // Ignore 'donations' property in User entity
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cid", referencedColumnName = "cid")
     private Cause cause;
     

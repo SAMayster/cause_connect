@@ -29,7 +29,7 @@ public class DonationService {
     public ResponseEntity<?> addDonation(String causeName, Donation donation, Integer userId) {
         Cause cause = crepo.findByName(causeName);
         Optional<User> userOptional = urepo.findById(userId);
-        System.out.println("XXXXXXXXXXXXXXXXXXX"+causeName + userId+ donation);
+       
         if (cause != null && userOptional.isPresent()) {
             User user = userOptional.get();
             if (donation.getPayableAmount() <= cause.getGoalAmount()) {

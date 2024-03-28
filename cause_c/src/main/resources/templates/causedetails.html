@@ -95,8 +95,6 @@
     margin-top: 20px; /* Adjust this value as per your needs */
     
 }
-
-
         .cause-page .form {
         height: auto;
         width: 400px;
@@ -112,8 +110,6 @@
         padding: 500px 35px 20px 35px;
         margin-top: 100px;
       }
-
-
 
       .cause-page .form * {
         font-family: 'Poppins',sans-serif;
@@ -142,6 +138,10 @@
         font-size: 14px;
         font-weight: 300;
       }
+
+      .white-text p{
+            color: white !important;
+        }
       
 
       .cause-page .form button {
@@ -170,7 +170,6 @@
                 }
             }
         </script>
-        ``
         
     </head>
     <body>
@@ -181,7 +180,7 @@
     <div class="container py-5">
         <div class="row justify-content-center">
             <!-- Left side box for cause image and name -->
-            <div class="col-md-7 col-lg-4 mb-5 mb-lg-0 wow fadeIn">
+            <div class="col-md-7 col-lg-4 mb-5 mb-lg-0 wow fadeIn description">
                 <div class="card border-0 shadow">
                     <div class="cause-page">
                         <div class="form">
@@ -211,7 +210,7 @@
             <!-- Right side box for cause details -->
             <div class="col-lg-8">
                 <div class="ps-lg-1-6 ps-xl-5">
-                    <div class="mb-5 wow fadeIn">
+                    <div class="mb-5 wow fadeIn white-text">
                         <p th:utext="${cause.description}">Cause Description</p>
                         <p th:if="${cause.amountRaised >= cause.goalAmount}" style="color: red;">The fundraising goal has been reached! Thank you for your support.</p>
                     </div>

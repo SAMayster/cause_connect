@@ -1,21 +1,12 @@
 package com.cause_connect.cause_c.controller;
 
 import java.util.Date;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 import com.cause_connect.cause_c.model.Cause;
 import com.cause_connect.cause_c.model.Donation;
 import com.cause_connect.cause_c.model.DonationDto;
@@ -23,15 +14,10 @@ import com.cause_connect.cause_c.model.User;
 import com.cause_connect.cause_c.repo.CauseRepo;
 import com.cause_connect.cause_c.repo.DonationRepo;
 import com.cause_connect.cause_c.repo.UserRepo;
-
-
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class DonationController {
-
-   
 
     @Autowired
     private CauseRepo crepo;
@@ -56,7 +42,7 @@ public class DonationController {
             // User is not logged in, redirect to home page
             return "redirect:/home";
         }
-    
+
         // User is logged in, proceed with donation
         Donation donation = new Donation();
         User user = urepo.findById(donationDto.getUser()).get();
@@ -64,7 +50,8 @@ public class DonationController {
 
         // Check if the goal amount has been reached or exceeded
         if (cause.getAmountRaised() >= cause.getGoalAmount()) {
-            model.addAttribute("goalReachedMessage", "The cause has already raised the required amount. No further donations are needed.");
+            model.addAttribute("goalReachedMessage",
+                    "The cause has already raised the required amount. No further donations are needed.");
             return "donationstatus";
         }
 
@@ -74,12 +61,12 @@ public class DonationController {
             model.addAttribute("cause", cause);
             return "donationstatus"; // Return to the donation status page
         }
-    
+
         // Update the amount raised for the cause
         cause.setAmountRaised(cause.getAmountRaised() + donationDto.getAmount());
         cause.setLastDonationDate(new Date());
         crepo.save(cause); // Save the updated cause
-    
+
         donation.setPayableAmount(donationDto.getAmount());
         donation.setUser(user);
         donation.setCause(cause);
@@ -89,12 +76,11 @@ public class DonationController {
         if (cause.getAmountRaised() >= cause.getGoalAmount()) {
             model.addAttribute("goalReachedMessage", "Congratulations! The cause has raised the required amount.");
         }
-    
+
         model.addAttribute("donationDto", donationDto);
         model.addAttribute("cause", cause);
         return "donationstatus";
     }
-    
 
     // @PostMapping("/donate")
     // public String addDonation(@ModelAttribute Donation donation,
